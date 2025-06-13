@@ -9,3 +9,5 @@ pub mod list_command;
 pub mod clean_command;
 pub mod persistence_key;
 pub mod project;
+
+pub use async_trait;
