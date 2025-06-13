@@ -1,4 +1,4 @@
-# eye_config
+# 👁 eye_config
 
 A Rust libaray and CLI tool for managing and tracking configuration files for projects.
 
