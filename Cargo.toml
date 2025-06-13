@@ -1,7 +1,11 @@
 [package]
 name = "eye_config"
+description = "A configuration persistence library and CLI tool."
 version = "0.1.0"
 edition = "2024"
+authors = ["TeamDman"]
+repository = "https://github.com/TeamDman/eye-config.git"
+license = "MPL-2.0"
 
 [features]
 bevy = ["dep:bevy_log"]
