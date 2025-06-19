@@ -1,7 +1,7 @@
 [package]
 name = "eye_config"
 description = "A configuration persistence library and CLI tool."
-version = "0.5.1"
+version = "0.5.2"
 edition = "2024"
 authors = ["TeamDman"]
 repository = "https://github.com/TeamDman/eye-config.git"
