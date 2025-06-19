@@ -6,11 +6,10 @@ From the examples:
 
 ```rust
 use cloud_terrastodon_user_input::prompt_line;
-use eye_config::global_args::GlobalArgs;
-use eye_config::init_tracing::init_tracing;
+use eye_config::cli::global_args::GlobalArgs;
+use eye_config::cli::init_tracing::init_tracing;
 use eye_config::persistable_state::PersistableState;
 use eye_config::persistence_key::PersistenceKey;
-use eye_config::project::PROJECT;
 use serde::Deserialize;
 use serde::Serialize;
 use tracing::info;
@@ -20,19 +19,25 @@ pub struct PreferredModelConfig {
     pub preferred_model: Option<String>,
 }
 
-#[async_trait::async_trait]
+#[eye_config::async_trait::async_trait]
 impl PersistableState for PreferredModelConfig {
     async fn key() -> eyre::Result<PersistenceKey> {
-        Ok(PersistenceKey::new(PROJECT, "example-preferred_model"))
+        Ok(PersistenceKey::new(
+            "eye_config_examples",
+            "example-preferred_model.json",
+        ))
     }
 }
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
+    color_eyre::install()?;
+    init_tracing(&GlobalArgs::default(), std::io::stderr)?;
+
+    info!("Run the program multiple times to see the persistent state in action.");
+
     // Load the preferred model configuration
     let config = PreferredModelConfig::load().await?;
-
-    // Display the value from the persisted state
     info!("Current Preferred Model: {:?}", config.preferred_model);
 
     let new_preferred_model =

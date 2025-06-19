@@ -1,7 +1,6 @@
-use async_trait::async_trait;
 use cloud_terrastodon_user_input::prompt_line;
-use eye_config::global_args::GlobalArgs;
-use eye_config::init_tracing::init_tracing;
+use eye_config::cli::global_args::GlobalArgs;
+use eye_config::cli::init_tracing::init_tracing;
 use eye_config::persistable_state::PersistableState;
 use eye_config::persistence_key::PersistenceKey;
 use serde::Deserialize;
@@ -13,7 +12,7 @@ pub struct PreferredModelConfig {
     pub preferred_model: Option<String>,
 }
 
-#[async_trait]
+#[eye_config::async_trait::async_trait]
 impl PersistableState for PreferredModelConfig {
     async fn key() -> eyre::Result<PersistenceKey> {
         Ok(PersistenceKey::new(
@@ -27,6 +26,8 @@ impl PersistableState for PreferredModelConfig {
 async fn main() -> eyre::Result<()> {
     color_eyre::install()?;
     init_tracing(&GlobalArgs::default(), std::io::stderr)?;
+
+    info!("Run the program multiple times to see the persistent state in action.");
 
     // Load the preferred model configuration
     let config = PreferredModelConfig::load().await?;
