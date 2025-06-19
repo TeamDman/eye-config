@@ -2,7 +2,7 @@ use super::clean_command::CleanCommand;
 use super::list_command::ListCommand;
 use super::prune_command::PruneCommand;
 use super::show_command::ShowCommand;
-use crate::global_args::GlobalArgs;
+use crate::cli::global_args::GlobalArgs;
 use clap::Parser;
 
 #[derive(Debug, Parser)]

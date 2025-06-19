@@ -1,4 +1,4 @@
-use crate::our_config::known_projects::KnownProjects;
+use crate::cli::config::known_projects::KnownProjects;
 use crate::persistence_key::PersistenceKey;
 use chrono::Utc;
 use eyre::Context;

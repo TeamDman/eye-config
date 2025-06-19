@@ -1,5 +1,5 @@
-use crate::global_args::GlobalArgs;
-use crate::our_config::known_projects::KnownProjects;
+use crate::cli::config::known_projects::KnownProjects;
+use crate::cli::global_args::GlobalArgs;
 use crate::persistable_state::PersistableState;
 use clap::Parser;
 use tracing::warn;

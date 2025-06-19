@@ -1,4 +1,4 @@
-use crate::global_args::GlobalArgs;
+use crate::cli::global_args::GlobalArgs;
 use tracing::level_filters::LevelFilter;
 use tracing_subscriber::EnvFilter;
 use tracing_subscriber::fmt::MakeWriter;

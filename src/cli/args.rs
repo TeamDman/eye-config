@@ -1,5 +1,5 @@
-use crate::command::Command;
-use crate::global_args::GlobalArgs;
+use crate::cli::command::Command;
+use crate::cli::global_args::GlobalArgs;
 use clap::Parser;
 
 #[derive(Parser, Debug)]

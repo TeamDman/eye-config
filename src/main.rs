@@ -1,7 +1,7 @@
 use clap::CommandFactory;
 use clap::FromArgMatches;
-use eye_config::args::Args;
-use eye_config::init_tracing::init_tracing;
+use eye_config::cli::args::Args;
+use eye_config::cli::init_tracing::init_tracing;
 use tracing::debug;
 
 #[tokio::main]
