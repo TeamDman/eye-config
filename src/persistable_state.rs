@@ -3,10 +3,8 @@ use crate::persistence_key::PersistenceKey;
 use chrono::Utc;
 use eyre::Context;
 use eyre::Result;
-use eyre::eyre;
 use serde::Deserialize;
 use serde::Serialize;
-use serde_json::Value;
 use serde_json::{self};
 use tokio::fs;
 use tracing::debug;
@@ -44,20 +42,18 @@ pub trait PersistableState:
                         "Failed to load config as valid type, will make a backup and revert to defaults. Error: {}",
                         err
                     );
-                    // If we fail, backup the original file and use the default.
+                    // Backup the original file and use the default.
                     let now = Utc::now().format("%Y%m%dT%H%M%SZ");
                     let backup_path = path.with_extension(format!("{}.bak", now));
                     fs::copy(&path, &backup_path).await?;
 
-                    // For upgrade purposes, we use the default JSON.
-                    let disk_json = serde_json::from_str(&content).wrap_err_with(|| {
-                        eyre!("Failed to parse config file {}", path.display())
-                    })?;
-                    let default_json = serde_json::to_value(&Self::default())?;
-                    let merged_json = merge_json(default_json, disk_json);
+                    // Inform the user about the backup.
+                    warn!(
+                        "Backup of the original config created at {}",
+                        backup_path.display()
+                    );
 
-                    serde_json::from_value(merged_json)
-                        .map_err(|e| eyre!("Failed to deserialize merged config: {}", e))?
+                    Self::default()
                 }
             }
         } else {
@@ -105,23 +101,5 @@ pub trait PersistableState:
     /// By default, configs are not secret.
     fn is_secret() -> bool {
         false
-    }
-}
-
-/// A recursive merge function that takes the `default` value and overrides
-/// with any keys found in `user` where the key exists in both objects.
-/// If both values are objects, the merge is done recursively.
-fn merge_json(default: Value, user: Value) -> Value {
-    match (default, user) {
-        // Both default and user are objects: merge key by key.
-        (Value::Object(mut default_map), Value::Object(user_map)) => {
-            for (key, user_value) in user_map {
-                let entry = default_map.entry(key).or_insert(Value::Null);
-                *entry = merge_json(entry.take(), user_value);
-            }
-            Value::Object(default_map)
-        }
-        // In all other cases, take the user value.
-        (_, user_value) => user_value,
     }
 }
