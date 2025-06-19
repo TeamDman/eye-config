@@ -9,6 +9,7 @@ use cloud_terrastodon_user_input::are_you_sure;
 use cloud_terrastodon_user_input::pick_many;
 use eyre::bail;
 
+/// Command to clean up temporary or generated files.
 #[derive(Debug, Parser)]
 pub struct CleanCommand {
     /// Optionally provide a value to parse as JSON for display

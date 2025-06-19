@@ -9,6 +9,7 @@ use cloud_terrastodon_user_input::pick;
 use eyre::bail;
 use serde_json::json;
 
+/// Command to show details for a specific configuration or item.
 #[derive(Debug, Parser)]
 pub struct ShowCommand {
     /// Optionally provide a value to parse as JSON for display

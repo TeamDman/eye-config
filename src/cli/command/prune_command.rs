@@ -4,6 +4,7 @@ use crate::persistable_state::PersistableState;
 use clap::Parser;
 use tracing::warn;
 
+/// Command to prune unused or obsolete configurations.
 #[derive(Debug, Parser)]
 pub struct PruneCommand {}
 

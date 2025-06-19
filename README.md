@@ -1,12 +1,16 @@
 # 👁 eye_config
 
-<p align="center">
-  <img src="logo.png" alt="Eye Config Logo" width="500"/>
-</p>
+<img src="logo.png" alt="" width="200"/>
 
-A Rust libaray and CLI tool for managing and tracking configuration files for projects.
+[![Crates.io Version](https://img.shields.io/crates/v/eye_config)](https://crates.io/crates/eye-config)
 
-There is a CLI that interacts with the written configs. Config defintions can mark themselves as secret to be excused from the CLI tracking.
+A Rust libaray and CLI tool for managing and tracking configuration files for
+projects.
+
+There is a CLI that interacts with the written configs. Config defintions can
+mark themselves as secret to be excused from the CLI tracking.
+
+## Sample library usage
 
 From the examples:
 
@@ -64,6 +68,8 @@ async fn main() -> eyre::Result<()> {
 }
 ```
 
+## Sample CLI output
+
 ```
 ❯ eye_config help
 A configuration persistence library and CLI tool.
@@ -71,15 +77,15 @@ A configuration persistence library and CLI tool.
 Usage: eye_config.exe [OPTIONS] <COMMAND>
 
 Commands:
-  list   
-  show   
-  clean  
-  prune  
+  list   List known configurations
+  show   Shows configuration details interactively or by key
+  clean  Remove configuration files
+  prune  Clean up known configuration entries which are no longer valid
   help   Print this message or the help of the given subcommand(s)
 
 Options:
       --debug         Enable debug logging
-      --interactive   If false, the program will error when interaction is requested 
+      --interactive   If false, the program will error when interaction is requested
       --auto-approve  If true, any confirmation prompt will be automatically approved
   -h, --help          Print help
   -V, --version       Print version
