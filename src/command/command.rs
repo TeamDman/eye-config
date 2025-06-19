@@ -1,12 +1,16 @@
+use super::clean_command::CleanCommand;
+use super::list_command::ListCommand;
+use super::prune_command::PruneCommand;
+use super::show_command::ShowCommand;
+use crate::global_args::GlobalArgs;
 use clap::Parser;
-
-use crate::{clean_command::CleanCommand, global_args::GlobalArgs, list_command::ListCommand, show_command::ShowCommand};
 
 #[derive(Debug, Parser)]
 pub enum Command {
     List(ListCommand),
     Show(ShowCommand),
     Clean(CleanCommand),
+    Prune(PruneCommand),
 }
 impl Command {
     pub async fn handle(self, global_args: GlobalArgs) -> eyre::Result<()> {
@@ -14,6 +18,7 @@ impl Command {
             Command::List(cmd) => cmd.handle(global_args).await,
             Command::Show(cmd) => cmd.handle(global_args).await,
             Command::Clean(cmd) => cmd.handle(global_args).await,
+            Command::Prune(cmd) => cmd.handle(global_args).await,
         }
     }
 }

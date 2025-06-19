@@ -18,7 +18,7 @@ impl PersistableState for PreferredModelConfig {
     async fn key() -> eyre::Result<PersistenceKey> {
         Ok(PersistenceKey::new(
             "eye_config_examples",
-            "example-preferred_model",
+            "example-preferred_model.json",
         ))
     }
 }

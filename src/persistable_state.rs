@@ -1,4 +1,4 @@
-use crate::known_projects::KnownProjects;
+use crate::our_config::known_projects::KnownProjects;
 use crate::persistence_key::PersistenceKey;
 use chrono::Utc;
 use eyre::Context;
@@ -35,30 +35,31 @@ pub trait PersistableState:
         let instance = if exists {
             debug!("Loading config from {}", path.display());
             let content = fs::read_to_string(&path).await?;
-            // Try to parse file into a serde_json::Value
-            let user_json: Value = match serde_json::from_str(&content) {
-                Ok(val) => val,
+
+            // Try to deserialize the string directly into the config type.
+            match serde_json::from_str::<Self>(&content) {
+                Ok(config) => config,
                 Err(err) => {
                     warn!(
-                        "Failed to load config as valid json, will make a backup and will revert to defaults. Error: {}",
+                        "Failed to load config as valid type, will make a backup and revert to defaults. Error: {}",
                         err
                     );
                     // If we fail, backup the original file and use the default.
                     let now = Utc::now().format("%Y%m%dT%H%M%SZ");
                     let backup_path = path.with_extension(format!("{}.bak", now));
                     fs::copy(&path, &backup_path).await?;
-                    // For upgrade purposes, we use the default JSON.
-                    serde_json::to_value(&Self::default())?
-                }
-            };
 
-            // Get the default config as JSON.
-            let default_json = serde_json::to_value(&Self::default())?;
-            // Merge the user config (if present) into the default config.
-            let merged_json = merge_json(default_json, user_json);
-            // Deserialize the merged JSON.
-            serde_json::from_value(merged_json)
-                .map_err(|e| eyre!("Failed to deserialize merged config: {}", e))?
+                    // For upgrade purposes, we use the default JSON.
+                    let disk_json = serde_json::from_str(&content).wrap_err_with(|| {
+                        eyre!("Failed to parse config file {}", path.display())
+                    })?;
+                    let default_json = serde_json::to_value(&Self::default())?;
+                    let merged_json = merge_json(default_json, disk_json);
+
+                    serde_json::from_value(merged_json)
+                        .map_err(|e| eyre!("Failed to deserialize merged config: {}", e))?
+                }
+            }
         } else {
             debug!(
                 "Config file {} does not exist, using default config",
@@ -80,8 +81,12 @@ pub trait PersistableState:
         if let Some(dir) = path.parent() {
             fs::create_dir_all(dir).await?;
         }
-        let content = serde_json::to_string_pretty(self)
-            .wrap_err_with(|| eyre::eyre!("Failed to serialize config {} with value {self:?}", path.display()))?;
+        let content = serde_json::to_string_pretty(self).wrap_err_with(|| {
+            eyre::eyre!(
+                "Failed to serialize config {} with value {self:?}",
+                path.display()
+            )
+        })?;
         debug!("Writing config to {:?}", path);
         fs::write(&path, content).await?;
         Ok(())

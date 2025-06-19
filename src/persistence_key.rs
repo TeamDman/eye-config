@@ -1,9 +1,8 @@
-use std::path::PathBuf;
-
 use directories_next::ProjectDirs;
 use eyre::bail;
 use serde::Deserialize;
 use serde::Serialize;
+use std::path::PathBuf;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
 pub struct PersistenceKey {
@@ -31,7 +30,7 @@ impl PersistenceKey {
         let config_path = dirs.config_dir().join(&self.file_slug);
         Ok(config_path)
     }
-    
+
     pub async fn exists(&self) -> eyre::Result<bool> {
         let path = self.file_path()?;
         Ok(tokio::fs::try_exists(&path).await?)

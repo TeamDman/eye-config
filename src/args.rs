@@ -1,6 +1,6 @@
+use crate::command::command::Command;
+use crate::global_args::GlobalArgs;
 use clap::Parser;
-
-use crate::{command::Command, global_args::GlobalArgs};
 
 #[derive(Parser, Debug)]
 #[cfg_attr(feature = "bevy", derive(bevy_reflect::Reflect))]

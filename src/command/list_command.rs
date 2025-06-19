@@ -1,10 +1,10 @@
-use std::collections::HashMap;
-
-use clap::Parser;
-
 use crate::global_args::GlobalArgs;
-use crate::known_projects::KnownProjects;
+use crate::our_config::known_projects::KnownProjectEntry;
+use crate::our_config::known_projects::KnownProjects;
 use crate::persistable_state::PersistableState;
+use clap::Parser;
+use std::collections::HashMap;
+use std::iter::once;
 
 #[derive(Debug, Parser)]
 pub struct ListCommand {}
@@ -17,6 +17,10 @@ impl ListCommand {
             &known_projects
                 .entries
                 .into_iter()
+                .chain(once(KnownProjectEntry {
+                    key: KnownProjects::key().await?,
+                    last_accessed: chrono::Local::now(),
+                }))
                 .map(|entry| Ok((entry.key.file_path()?.display().to_string(), entry)))
                 .collect::<eyre::Result<HashMap<_, _>>>()?,
         )?;
