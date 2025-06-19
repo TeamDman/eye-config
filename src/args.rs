@@ -1,4 +1,4 @@
-use crate::command::command::Command;
+use crate::command::Command;
 use crate::global_args::GlobalArgs;
 use clap::Parser;
 

@@ -24,7 +24,7 @@ impl ListCommand {
                 .map(|entry| Ok((entry.key.file_path()?.display().to_string(), entry)))
                 .collect::<eyre::Result<HashMap<_, _>>>()?,
         )?;
-        println!("{}", display);
+        println!("{display}");
         Ok(())
     }
 }

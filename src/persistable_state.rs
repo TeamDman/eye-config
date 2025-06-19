@@ -44,7 +44,7 @@ pub trait PersistableState:
                     );
                     // Backup the original file and use the default.
                     let now = Utc::now().format("%Y%m%dT%H%M%SZ");
-                    let backup_path = path.with_extension(format!("{}.bak", now));
+                    let backup_path = path.with_extension(format!("{now}.bak"));
                     fs::copy(&path, &backup_path).await?;
 
                     // Inform the user about the backup.
@@ -90,7 +90,7 @@ pub trait PersistableState:
 
     async fn modify_and_save<F>(&mut self, f: F) -> Result<()>
     where
-        F: FnOnce(&mut Self) -> () + Send,
+        F: FnOnce(&mut Self) + Send,
     {
         f(self);
         self.save().await?;

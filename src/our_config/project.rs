@@ -1,1 +1,1 @@
-pub(crate) const PROJECT: &'static str = "eye_config";
+pub(crate) const PROJECT: &str = "eye_config";

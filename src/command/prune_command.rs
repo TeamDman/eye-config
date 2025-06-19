@@ -14,7 +14,10 @@ impl PruneCommand {
         let mut remaining = Vec::new();
         for entry in known_projects.entries {
             if !entry.key.exists().await? {
-                warn!("Removing entry for non-existent project: {}", entry.key.file_path()?.display());
+                warn!(
+                    "Removing entry for non-existent project: {}",
+                    entry.key.file_path()?.display()
+                );
             } else {
                 remaining.push(entry);
             }

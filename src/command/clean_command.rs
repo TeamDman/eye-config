@@ -18,7 +18,7 @@ pub struct CleanCommand {
 
 fn parse_persistence_key(s: &str) -> Result<PersistenceKey, String> {
     serde_json::from_str::<PersistenceKey>(s)
-        .map_err(|e| format!("Failed to parse PersistenceKey: {}", e))
+        .map_err(|e| format!("Failed to parse PersistenceKey: {e}"))
 }
 impl CleanCommand {
     pub async fn handle(self, global_args: GlobalArgs) -> eyre::Result<()> {
@@ -57,14 +57,13 @@ impl CleanCommand {
         };
         for key in keys {
             let path_to_remove = key.file_path()?;
-            if global_args.interactive {
-                if !are_you_sure(&format!(
+            if global_args.interactive
+                && !are_you_sure(format!(
                     "Are you sure you want to remove the file at {}?",
                     path_to_remove.display()
                 ))? {
                     bail!("Operation cancelled by user");
                 }
-            }
             tokio::fs::remove_file(path_to_remove).await?;
             known_projects.entries.retain(|entry| entry.key != key);
             known_projects.save().await?;

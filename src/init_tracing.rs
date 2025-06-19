@@ -39,7 +39,7 @@ pub fn init_tracing(
                 }
                 #[cfg(not(feature = "bevy"))]
                 {
-                    format!("{}", determined_default_log_level)
+                    format!("{determined_default_log_level}")
                 }
             };
             EnvFilter::builder().parse_lossy(filter_string)

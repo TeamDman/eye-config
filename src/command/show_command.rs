@@ -18,7 +18,7 @@ pub struct ShowCommand {
 
 fn parse_persistence_key(s: &str) -> Result<PersistenceKey, String> {
     serde_json::from_str::<PersistenceKey>(s)
-        .map_err(|e| format!("Failed to parse PersistenceKey: {}", e))
+        .map_err(|e| format!("Failed to parse PersistenceKey: {e}"))
 }
 
 impl ShowCommand {
@@ -67,7 +67,7 @@ impl ShowCommand {
             "last_accessed": last_accessed,
             "file_path": key.file_path()?.display().to_string(),
         }))?;
-        println!("{}", display);
+        println!("{display}");
         Ok(())
     }
 }
