@@ -1,8 +1,16 @@
 # 👁 eye_config
 
+<p align="center">
+  <img src="logo.png" alt="Eye Config Logo" width="500"/>
+</p>
+
 A Rust libaray and CLI tool for managing and tracking configuration files for projects.
 
+There is a CLI that interacts with the written configs. Config defintions can mark themselves as secret to be excused from the CLI tracking.
+
 From the examples:
+
+[preferred_model.rs](./examples/preferred_model.rs)
 
 ```rust
 use cloud_terrastodon_user_input::prompt_line;
@@ -54,4 +62,25 @@ async fn main() -> eyre::Result<()> {
 
     Ok(())
 }
+```
+
+```
+❯ eye_config help
+A configuration persistence library and CLI tool.
+
+Usage: eye_config.exe [OPTIONS] <COMMAND>
+
+Commands:
+  list   
+  show   
+  clean  
+  prune  
+  help   Print this message or the help of the given subcommand(s)
+
+Options:
+      --debug         Enable debug logging
+      --interactive   If false, the program will error when interaction is requested 
+      --auto-approve  If true, any confirmation prompt will be automatically approved
+  -h, --help          Print help
+  -V, --version       Print version
 ```
